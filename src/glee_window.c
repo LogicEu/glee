@@ -88,7 +88,7 @@ void glee_window_create(const char* title, int width, int height, unsigned int f
 
     glee.window = window;
     glee.fullscreen = fullscreen;
-    printf("Core initiated succesfully.\n");
+    printf("glee initiated succesfully.\n");
 }
 
 void glee_window_set_size(int width, int height)
