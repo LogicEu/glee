@@ -1,6 +1,10 @@
 #include "glee_common.h"
 #include <stdio.h>
 
+#ifndef __APPLE__
+    #define GLFW_LOCK_KEY_MODS 0x00033004
+#endif
+
 /*
 -------------
  -> window <- 

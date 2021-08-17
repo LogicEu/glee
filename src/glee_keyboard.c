@@ -1,5 +1,9 @@
 #include "glee_common.h"
 
+#ifndef __APPLE__ 
+    #define GLFW_MOD_CAPS_LOCK 0x0010
+#endif
+
 /*
 ---------------------
  -> keyboard input <- 
