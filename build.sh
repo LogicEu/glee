@@ -1,5 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
+cc=gcc
+src=src/*.c
 name=libglee
 
 flags=(
@@ -18,33 +20,31 @@ lib=(
     -lglfw
 )
 
-linux_flags=(
+linux=(
     -lGL
     -lGLEW
 )
 
-mac_flags=(
+mac=(
     -framework OpenGL
     # -mmacos-version-min=10.9
 )
 
 fail_op() {
-    echo "Run with -d to build dynamically, or -s to build statically."
-    exit
+    echo "Run with -d to build dynamically, or -s to build statically." && exit
 }
 
 fail_os() {
-    echo "OS is not supported yet..."
-    exit
+    echo "OS is not supported yet..." && exit
 }
 
 mac_dlib() {
-        gcc ${flags[*]} ${inc[*]} ${lib[*]} ${mac_flags[*]} -dynamiclib src/*.c -o $name.dylib
-        install_name_tool -id @executable_path/$name.dylib $name.dylib 
+    $cc ${flags[*]} ${inc[*]} ${lib[*]} ${mac[*]} -dynamiclib $src -o $name.dylib &&\
+    install_name_tool -id @executable_path/$name.dylib $name.dylib 
 }
 
 linux_dlib() {
-    gcc -shared ${flags[*]} ${inc[*]} ${lib[*]} ${linux_flags[*]} -fPIC src/*.c -o $name.so 
+    $cc -shared ${flags[*]} ${inc[*]} ${lib[*]} ${linux[*]} -fPIC $src -o $name.so 
 }
 
 dlib() {
@@ -58,17 +58,14 @@ dlib() {
 }
 
 slib() {
-    gcc ${flags[*]} ${inc[*]} -c src/*.c
-    ar -crv $name.a *.o
-    rm *.o
+    $cc ${flags[*]} ${inc[*]} -c $src && ar -crv $name.a *.o && rm *.o
 }
 
-if [[ $# < 1 ]]; then 
-    fail_op
-elif [[ "$1" == "-d" ]]; then
-    dlib
-elif [[ "$1" == "-s" ]]; then
-    slib
-else
-    fail_op
-fi 
+case "$1" in
+    "-d")
+        dlib;;
+    "-s")
+        slib;;
+    *)
+        fail_op;;
+esac
