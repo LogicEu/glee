@@ -12,7 +12,7 @@ gleeManager glee;
 void glee_init()
 {
     if (!glfwInit()) {
-        printf("GLFW Library could not initiate.\n");
+        printf("glee failed to initiate GLFW\n");
         return;
     }
     glee.window = NULL;

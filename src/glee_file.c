@@ -27,7 +27,7 @@ char* glee_file_read(const char* path)
 {
     FILE* file = fopen(path, "rb");
     if (!file) {
-        printf("Cannot open file '%s'\n", path);
+        printf("glee could not open file '%s'\n", path);
         return NULL;
     }
     fseek(file, 0, SEEK_END);

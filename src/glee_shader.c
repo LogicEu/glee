@@ -19,7 +19,7 @@ char* glee_shader_file_read(const char* path)
 {
     FILE* file = fopen(path, "rb");
     if (!file) {
-        printf("Cannot open file '%s'\n", path);
+        printf("glee could not open GLSL shader source file '%s'\n", path);
         return NULL;
     }
     fseek(file, 0, SEEK_END);
@@ -67,15 +67,14 @@ void glee_shader_link(GLuint shader, unsigned int vshader, unsigned int fshader)
 
 unsigned int glee_shader_load(const char *vpath, const char *fpath)
 {
-    printf("Loading shaders...\n");
     unsigned int shader = glCreateProgram();
 
     char* vb = glee_shader_file_read(vpath);
     char* fb = glee_shader_file_read(fpath);
     if (!vb || !fb) {
-        printf("There was an error loading shaders '%s' and '%s'\n", vpath, fpath);
+        printf("glee had a problem loading shaders '%s' and '%s'\n", vpath, fpath);
         return 0;
-    }
+    } else printf("glee is loading shaders '%s' and '%s'\n", vpath, fpath);
 
     unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -101,5 +100,5 @@ void glee_shader_uniform_set(unsigned int shader, unsigned int float_count, cons
         glUniform3f(glGetUniformLocation(shader, uniform), data[0], data[1], data[2]);
     } else if (float_count == 4) {
         glUniform4f(glGetUniformLocation(shader, uniform), data[0], data[1], data[2], data[3]);
-    } else printf("Invalid call of function 'shader_set_uniform_float'\n");
+    } else printf("'glee_shader_uniform_set' does not support %d floats\n", float_count);
 }

@@ -60,7 +60,7 @@ void glee_window_create(const char* title, int width, int height, unsigned int f
     }
 
     if (window == NULL) {
-        printf("Window failed to create\n");
+        printf("glee failed to initiate a GLFW window\n");
         glfwTerminate();
         return;
     }
@@ -80,7 +80,7 @@ void glee_window_create(const char* title, int width, int height, unsigned int f
 #ifndef __APPLE__
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
-        printf("GLEW Library failed to initialize.\n");
+        printf("glee failed to initiate GLEW\n");
         return;
     }
 #endif
@@ -92,7 +92,6 @@ void glee_window_create(const char* title, int width, int height, unsigned int f
 
     glee.window = window;
     glee.fullscreen = fullscreen;
-    printf("glee initiated succesfully.\n");
 }
 
 void glee_window_set_size(int width, int height)
