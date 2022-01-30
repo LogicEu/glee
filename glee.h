@@ -46,7 +46,7 @@ void glee_window_get_position(int* x, int* y);
 unsigned int glee_window_is_open();
 
 void glee_screen_color(float r, float g, float b, float a);
-void glee_screen_clear();
+void glee_screen_clear(int mode);
 void glee_screen_refresh();
 
 char* glee_shader_file_read(const char* path);
