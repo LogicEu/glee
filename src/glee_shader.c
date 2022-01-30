@@ -9,12 +9,6 @@ static const char* glsl_version = "#version 300 es\nprecision mediump float;\n\n
 static const char* glsl_version = "#version 330 core\n\n";
 #endif
 
-/*
---------------
- -> shaders <- 
---------------
-*/
-
 char* glee_shader_file_read(const char* path)
 {
     FILE* file = fopen(path, "rb");
@@ -65,12 +59,31 @@ void glee_shader_link(GLuint shader, unsigned int vshader, unsigned int fshader)
     glDeleteShader(fshader);
 }
 
+void glee_shader_link_geometry(GLuint shader, unsigned int vshader, unsigned int gshader, unsigned int fshader)
+{
+    int success;
+    char infoLog[512];
+    glAttachShader(shader, vshader);
+    glAttachShader(shader, gshader);
+    glAttachShader(shader, fshader);
+    glLinkProgram(shader);
+    glGetProgramiv(shader, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shader, 512, NULL, infoLog);
+        printf("ERROR::SHADER::PROGRAM::LINKING_FAILED\n %s", infoLog);
+    }
+    glDeleteShader(vshader);
+    glDeleteShader(gshader);
+    glDeleteShader(fshader);
+}
+
 unsigned int glee_shader_load(const char *vpath, const char *fpath)
 {
     unsigned int shader = glCreateProgram();
 
     char* vb = glee_shader_file_read(vpath);
     char* fb = glee_shader_file_read(fpath);
+    
     if (!vb || !fb) {
         printf("glee had a problem loading shaders '%s' and '%s'\n", vpath, fpath);
         return 0;
@@ -87,6 +100,38 @@ unsigned int glee_shader_load(const char *vpath, const char *fpath)
 
     free(vb);
     free(fb);
+
+    return shader;
+}
+
+unsigned int glee_shader_load_geometry(const char *vpath, const char *gpath, const char *fpath)
+{
+    unsigned int shader = glCreateProgram();
+
+    char* vb = glee_shader_file_read(vpath);
+    char* gb = glee_shader_file_read(gpath);
+    char* fb = glee_shader_file_read(fpath);
+    
+    if (!vb || !fb || !gb) {
+        printf("glee had a problem loading shaders '%s', '%s' and '%s'\n", vpath, gpath, fpath);
+        return 0;
+    } else printf("glee is loading shaders '%s', '%s' and '%s'\n", vpath, gpath, fpath);
+
+    unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    unsigned int geometry_shader = glCreateShader(GL_GEOMETRY_SHADER);
+    unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    
+    glee_shader_compile(vb, vertex_shader);
+    glee_shader_compile(gb, geometry_shader);
+    glee_shader_compile(fb, fragment_shader);
+    glee_shader_link_geometry(shader, vertex_shader, geometry_shader, fragment_shader);
+
+    glUseProgram(shader);
+
+    free(vb);
+    free(gb);
+    free(fb);
+
     return shader;
 }
 

@@ -1,11 +1,5 @@
 #include <glee.h>
 
-/*
------------------
- -> time input <- 
------------------
-*/
-
 float glee_time_get()
 {
     return (float)glfwGetTime();

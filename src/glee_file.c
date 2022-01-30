@@ -7,12 +7,6 @@ static unsigned new_file = 0;
 static unsigned int used = 0;
 static char file_paths[16][256];
 
-/*
--------------
- -> files <- 
--------------
-*/
-
 void GLdrop_file(GLFWwindow* window, int count, const char** paths)
 {
     if (used >= 16) return;

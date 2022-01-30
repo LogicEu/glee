@@ -4,12 +4,6 @@
     #define GLFW_MOD_CAPS_LOCK 0x0010
 #endif
 
-/*
----------------------
- -> keyboard input <- 
----------------------
-*/
-
 static unsigned int keys[1024], pressed_keys[1024], char_ret = 1;
 static char key_char = '\0';
 

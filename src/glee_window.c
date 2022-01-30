@@ -11,27 +11,15 @@
 -------------
 */
 
-static void GLwindow_size(GLFWwindow* window, int width, int height)
-{
-    glee.width = width;
-    glee.height = height;
-    glee.update = 1;
-}
-
-static void GLframebuffer_size(GLFWwindow* window, int width, int height)
-{
-    glee.update = 1;
-}
+static GLFWwindow* window;
 
 GLFWwindow* glee_window_get()
 {
-    return glee.window;
+    return window;
 }
 
 void glee_window_create(const char* title, int width, int height, unsigned int fullscreen, unsigned int resizable)
 {
-    GLFWwindow* window;
-
 #ifdef __APPLE__
     glfwWindowHint(GLFW_SAMPLES, 4); // 4x antialiasing
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -51,12 +39,8 @@ void glee_window_create(const char* title, int width, int height, unsigned int f
         glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
         glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
         window = glfwCreateWindow(mode->width, mode->height, title, monitor, NULL);
-        glee.width = mode->width;
-        glee.height = mode->height;
     } else {
         window = glfwCreateWindow(width, height, title, NULL, NULL);
-        glee.width = width;
-        glee.height = height;
     }
 
     if (window == NULL) {
@@ -69,8 +53,8 @@ void glee_window_create(const char* title, int width, int height, unsigned int f
 
     glfwSetWindowAspectRatio(window, width, height);
     glfwSetWindowSizeLimits(window, width / 2, height / 2, GLFW_DONT_CARE, GLFW_DONT_CARE);
-    glfwSetWindowSizeCallback(window, GLwindow_size);
-    glfwSetFramebufferSizeCallback(window, GLframebuffer_size);
+    //glfwSetWindowSizeCallback(window, GLwindow_size);
+    //glfwSetFramebufferSizeCallback(window, GLframebuffer_size);
     glfwSetDropCallback(window, GLdrop_file);
     
     glfwSetInputMode(window, GLFW_LOCK_KEY_MODS, GLFW_TRUE);
@@ -89,33 +73,34 @@ void glee_window_create(const char* title, int width, int height, unsigned int f
     glEnable(GL_BLEND); 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthFunc(GL_LESS);
-
-    glee.window = window;
-    glee.fullscreen = fullscreen;
 }
 
 void glee_window_set_size(int width, int height)
 {
-    glfwSetWindowSize(glee.window, width, height);
-    glee.update = 1;
+    glfwSetWindowSize(window, width, height);
 }
 
 void glee_window_get_size(int* width, int* height)
 {
-    glfwGetWindowSize(glee.window, width, height);
+    glfwGetWindowSize(window, width, height);
+}
+
+void glee_window_get_framebuffer_size(int* width, int* height)
+{
+    glfwGetFramebufferSize(window, width, height);
 }
 
 void glee_window_set_position(int x, int y)
 {
-    glfwSetWindowPos(glee.window, x, y);
+    glfwSetWindowPos(window, x, y);
 }
 
 void glee_window_get_position(int* x, int* y)
 {
-    glfwGetWindowPos(glee.window, x, y);
+    glfwGetWindowPos(window, x, y);
 }
 
 unsigned int glee_window_is_open()
 {
-    return !glfwWindowShouldClose(glee.window);
+    return !glfwWindowShouldClose(window);
 }

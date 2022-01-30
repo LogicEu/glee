@@ -1,11 +1,5 @@
 #include <glee.h>
 
-/*
----------------------
- -> vertex buffers <- 
----------------------
-*/
-
 unsigned int quad_vertex_buffer_id, voxel_vertex_buffer_id;
 
 unsigned int glee_buffer_id()
