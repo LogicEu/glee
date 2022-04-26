@@ -7,7 +7,6 @@ name=libglee
 flags=(
     -std=c99
     -Wall
-    -Wextra
     -O2
     -I.
 )
@@ -26,7 +25,7 @@ mac=(
     # -mmacos-version-min=10.9
 )
 
-dlib() {
+shared() {
     if echo "$OSTYPE" | grep -q "darwin"; then
         $cc ${flags[*]} ${lib[*]} ${mac[*]} -dynamiclib $src -o $name.dylib
     elif echo "$OSTYPE" | grep -q "linux"; then
@@ -36,7 +35,7 @@ dlib() {
     fi
 }
 
-slib() {
+static() {
     $cc ${flags[*]} -c $src && ar -cr $name.a *.o && rm *.o
 }
 
