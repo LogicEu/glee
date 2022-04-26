@@ -9,23 +9,34 @@ CC=gcc
 NAME=libglee
 SRC=src/*.c
 
-MAC_LIBS=-framework OpenGL
-LINUX_LIBS=-lGL -lGLEW
+SCRIPT=build.sh
+
+MAC=-framework OpenGL
+LINUX=-lGL -lGLEW
 
 CFLAGS=$(STD) $(WFLAGS) $(OPT) $(IDIR)
-OS=$(shell uname -s)
 
+OS=$(shell uname -s)
 ifeq ($(OS),Darwin)
-	OSFLAGS=$(MAC_LIBS) -dynamiclib
+	OSFLAGS=$(MAC) -dynamiclib
 	LIB=$(NAME).dylib
 else
-	OSFLAGS=$(LINUX_LIBS) -shared -fPIC
+	OSFLAGS=$(LINUX) -shared -fPIC
 	LIB=$(NAME).so
 endif
 
 $(NAME).a: $(SRC)
-	$(CC) $(CFLAGS) -c $(SRC) && ar -crv $(NAME).a *.o && rm *.o
+	$(CC) $(CFLAGS) -c $(SRC) && ar -cr $(NAME).a *.o && rm *.o
 
 shared: $(SRC)
 	$(CC) -o $(LIB) $(SRC) $(CFLAGS) $(LIBS) $(OSFLAGS)
-	
+
+clean: $(SCRIPT)
+	./$^ $@
+
+install: $(SCRIPT)
+	./$^ $@
+
+uninstall: $(SCRIPT)
+	./$^ $@
+
