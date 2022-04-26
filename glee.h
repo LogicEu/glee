@@ -8,6 +8,7 @@ extern "C" {
 #ifndef __APPLE__
     #include <GL/glew.h>
 #else
+    #define GL_SILENCE_DEPRECATION
     #define GLFW_INCLUDE_GLCOREARB
 #endif
 

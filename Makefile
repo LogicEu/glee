@@ -1,7 +1,7 @@
 # glee makefile
 
 STD=-std=c99
-WFLAGS=-Wall -Wextra
+WFLAGS=-Wall
 OPT=-O2
 IDIR=-I.
 LIBS=-lglfw
